@@ -1,6 +1,3 @@
-import { runInThisContext } from "vm";
-import { threadId } from "worker_threads";
-
 class WordSearch {
     constructor(grid) {
         this.directions = [
@@ -70,13 +67,8 @@ class WordSearch {
     }
 
     getValidDirections(rowIndex, colIndex) {
-        const gridSize = this.grid.length;
-
-        return this.directions.filter(([x, y]) => {
-            const rowSum = x < 0 ? rowIndex - Math.abs(x) : rowIndex + x;
-            const colSum = y < 0 ? colIndex - Math.abs(y) : colIndex + y;
-
-            return rowSum >= 0 && colSum >= 0 && rowSum < gridSize;
+        return this.directions.filter((direction) => {
+            return this.isValidPosition([rowIndex, colIndex], direction);
         });
     }
 
@@ -119,6 +111,15 @@ class WordSearch {
             }),
             {},
         );
+    }
+
+    isValidPosition(currentPosition, nextPosition) {
+        const [rowIndex, colIndex] = currentPosition;
+        const [x, y] = nextPosition;
+        const rowSum = x < 0 ? rowIndex - Math.abs(x) : rowIndex + x;
+        const colSum = y < 0 ? colIndex - Math.abs(y) : colIndex + y;
+
+        return rowSum >= 0 && colSum >= 0 && rowSum < this.grid.length;
     }
 
     solve(prefix, [rowIndex, colIndex], direction, word) {
