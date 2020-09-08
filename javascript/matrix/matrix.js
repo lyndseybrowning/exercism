@@ -1,8 +1,7 @@
 export class Matrix {
     constructor(str) {
         this.grid = str.split(`\n`);
-        this._rows = this.createRows();
-        this._cols = this.createColumns();
+        this.gridRows = this.createRows();
     }
 
     createRows() {
@@ -17,21 +16,16 @@ export class Matrix {
     }
 
     createColumns() {
-        const rows = this._rows;
-        const cols = rows[0].map((_, index) => {
-            return rows.map((row) => {
-                return row[index];
-            });
-        });
-
-        return cols;
+        return this.gridRows[0].map((_, index) =>
+            this.gridRows.map((row) => row[index]),
+        );
     }
 
     get rows() {
-        return this._rows;
+        return this.gridRows;
     }
 
     get columns() {
-        return this._cols;
+        return this.createColumns();
     }
 }
